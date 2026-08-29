@@ -25,19 +25,12 @@ You almost never reverse-engineer anything yourself: the community project
 Lumina already parses the game files. Your job is to copy those into a small
 reader and wire up a UI.
 
-## First decision: how the app is hosted
+## Host
 
-`ReadProcessMemory` and P/Invoke are **not available in a browser WASM sandbox.**
-Pick a host that runs full .NET:
-
-- **Blazor Hybrid (WPF + BlazorWebView)** — recommended. Razor components run on
-  full .NET, so they call `ReadProcessMemory` directly. Desktop app, one process.
-- **Console / WinForms / WPF** — fine for a headless reader or smoke test.
-- **True Blazor WASM** — only if you split into a local backend process that does
-  the reading + a WASM frontend talking to it over HTTP. Much more work; avoid
-  unless a browser UI is a hard requirement.
-
-See `references/blazor-hybrid-ui.md` for the WPF + BlazorWebView wiring.
+The reader needs a host running full .NET. For a UI, **Blazor Hybrid (WPF +
+BlazorWebView)** works well — Razor components run on full .NET and call
+`ReadProcessMemory` directly (see `references/blazor-hybrid-ui.md`). A plain
+console app is fine for a headless reader or smoke test.
 
 ## The workflow
 

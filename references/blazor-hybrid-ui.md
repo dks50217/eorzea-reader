@@ -1,8 +1,8 @@
 # Blazor Hybrid UI (WPF + BlazorWebView)
 
 A desktop UI whose Razor components run on full .NET, so they can call
-`ReadProcessMemory` directly — unlike browser WASM. This is the proven host for an
-FFXIV reader with a web-style UI.
+`ReadProcessMemory` directly. This is the proven host for an FFXIV reader with a
+web-style UI.
 
 ## Project file
 
@@ -109,10 +109,3 @@ Key points: do the slow Lumina init inside `Task.Run` so the window paints
 immediately; poll with `System.Threading.Timer`; always `InvokeAsync(StateHasChanged)`
 because the timer callback is off the render thread; guard every read in try/catch
 and surface the message (the game can close mid-session).
-
-## If you truly need a browser (WASM) UI
-
-WASM can't read memory. Split it: a small local process (console/WinForms host, or
-ASP.NET minimal API) does the reading and exposes it over `http://localhost`, and a
-Blazor WASM frontend fetches from it. Only worth it if a browser is a hard
-requirement — the Hybrid app above is one process and far less plumbing.
