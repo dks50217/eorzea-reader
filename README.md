@@ -46,10 +46,10 @@ eorzea-reader/
 
 ```bash
 # personal (all projects)
-git clone https://github.com/<you>/eorzea-reader.git ~/.claude/skills/eorzea-reader
+git clone https://github.com/dks50217/eorzea-reader.git ~/.claude/skills/eorzea-reader
 
 # or per-project
-git clone https://github.com/<you>/eorzea-reader.git .claude/skills/eorzea-reader
+git clone https://github.com/dks50217/eorzea-reader.git .claude/skills/eorzea-reader
 ```
 
 It's discovered on next start. Invoke with `/eorzea-reader`, or just ask about
@@ -124,10 +124,10 @@ eorzea-reader/
 
 ```bash
 # 個人（所有專案共用）
-git clone https://github.com/<你的帳號>/eorzea-reader.git ~/.claude/skills/eorzea-reader
+git clone https://github.com/dks50217/eorzea-reader.git ~/.claude/skills/eorzea-reader
 
 # 或只給單一專案
-git clone https://github.com/<你的帳號>/eorzea-reader.git .claude/skills/eorzea-reader
+git clone https://github.com/dks50217/eorzea-reader.git .claude/skills/eorzea-reader
 ```
 
 下次啟動就會載入。打 `/eorzea-reader` 叫它，或直接問關於讀 FFXIV
