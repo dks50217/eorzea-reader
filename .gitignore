@@ -1,0 +1,7 @@
+# This repo is a Claude Skill (docs + code templates); nothing gets built here.
+# Ignore stray OS / editor cruft only.
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/

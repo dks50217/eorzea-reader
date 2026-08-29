@@ -1,0 +1,101 @@
+---
+name: eorzea-reader
+description: >-
+  Build tools that read Final Fantasy XIV live game state from process memory
+  and read static data from the game's files. Covers external ReadProcessMemory
+  reading, locating data via FFXIVClientStructs signatures and struct offsets,
+  and reading names/icons with Lumina. Use when the user wants to read FFXIV
+  inventory, gear, party, character, or any in-game data from memory, port such
+  a reader into a Blazor Hybrid (WPF + BlazorWebView) UI, or debug a signature /
+  offset that stopped working after a patch.
+---
+
+# Reading FFXIV memory and game files
+
+This skill captures a working, validated approach for reading FFXIV data from an
+external .NET process. Two data sources:
+
+1. **Live state** (inventory contents, equipped gear, current position…) — lives
+   in the running `ffxiv_dx11.exe` process. Read it with `ReadProcessMemory`.
+2. **Static data** (item names, icons, dye colors, recipe tables…) — lives in the
+   game's `sqpack` files on disk. Read it with **Lumina**.
+
+You almost never reverse-engineer anything yourself: the community project
+**FFXIVClientStructs** already maintains the signatures and struct layouts, and
+Lumina already parses the game files. Your job is to copy those into a small
+reader and wire up a UI.
+
+## First decision: how the app is hosted
+
+`ReadProcessMemory` and P/Invoke are **not available in a browser WASM sandbox.**
+Pick a host that runs full .NET:
+
+- **Blazor Hybrid (WPF + BlazorWebView)** — recommended. Razor components run on
+  full .NET, so they call `ReadProcessMemory` directly. Desktop app, one process.
+- **Console / WinForms / WPF** — fine for a headless reader or smoke test.
+- **True Blazor WASM** — only if you split into a local backend process that does
+  the reading + a WASM frontend talking to it over HTTP. Much more work; avoid
+  unless a browser UI is a hard requirement.
+
+See `references/blazor-hybrid-ui.md` for the WPF + BlazorWebView wiring.
+
+## The workflow
+
+1. **Copy the reusable skeleton.** `assets/WinApi.cs` (P/Invoke) and
+   `assets/MemScanner.cs` (open process, scan `.text`, resolve RIP-relative
+   addresses, follow pointer chains) are generic — drop them in unchanged.
+
+2. **Get the signature + offsets from FFXIVClientStructs**, not by hand:
+   - Repo: https://github.com/aers/FFXIVClientStructs
+   - API docs (searchable): https://ffxiv.wildwolf.dev/
+   - Find the manager struct (e.g. `InventoryManager`). Copy its
+     `[StaticAddress("...")]` byte pattern and the `[FieldOffset(0x..)]` of the
+     fields you need. Copy nested struct layouts too (`InventoryContainer`,
+     `InventoryItem`, …).
+   - See `references/clientstructs-mapping.md` for how a CS attribute maps to
+     `MemScanner` calls line by line.
+
+3. **Write a small reader** that subclasses `MemScanner`: resolve the signature
+   once in the constructor, then read + parse the struct block in a `Read()`
+   method. Filter/index as the struct dictates.
+
+4. **Add names/icons with Lumina** — `references/game-files-lumina.md`. Item name
+   is one line: `sItem.GetRow(id).Name`. Icons decode to a `data:image/bmp` URI.
+
+5. **Wire a UI** if wanted — `references/blazor-hybrid-ui.md`.
+
+## Two gotchas that will bite you (they bit us)
+
+These are the non-obvious failures; check them first when a reader returns
+nothing or garbage.
+
+- **Short signatures match in multiple places.** A pattern like
+  `48 8D 0D ?? ?? ?? ?? 81 C2` (9 bytes) occurs many times in `.text`. Taking the
+  *first* match gives the wrong address. Enumerate **all** matches and validate
+  each against the expected struct shape, then keep the winner. `MemScanner` has
+  `ResolveRipAll` for this; see `references/memory-reading.md`.
+
+- **A `T*` field in FFXIVClientStructs is a pointer — you must dereference it.**
+  e.g. `[FieldOffset(0x1E08)] public InventoryContainer* Inventories;` means
+  `instance + 0x1E08` holds a *pointer to* the array, not the array. Read the
+  8-byte pointer first, then index. Treating it as an inline struct reads garbage
+  and finds nothing.
+
+## Legality / scope note
+
+External memory reading of a live game can violate the game's Terms of Service
+and may be blocked by anti-cheat. This skill is for local, personal, read-only
+tooling and learning. Do not build cheating, automation that plays the game, or
+anything that modifies game memory unless the user has a clear legitimate reason.
+
+## Reference files
+
+- `references/memory-reading.md` — MemScanner internals: `.text` extraction,
+  RIP-relative resolution, multi-match validation, pointer following.
+- `references/clientstructs-mapping.md` — turning a CS `[StaticAddress]` /
+  `[FieldOffset]` into reader code; a worked InventoryManager example.
+- `references/game-files-lumina.md` — Lumina setup, item names, icon→BMP URIs,
+  dye colors, language selection.
+- `references/blazor-hybrid-ui.md` — WPF + BlazorWebView project layout, DI
+  registration, per-second refresh component.
+- `assets/WinApi.cs`, `assets/MemScanner.cs` — copy-in templates.
