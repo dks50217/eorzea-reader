@@ -25,6 +25,27 @@ You almost never reverse-engineer anything yourself: the community project
 Lumina already parses the game files. Your job is to copy those into a small
 reader and wire up a UI.
 
+## Why external reading, not a Dalamud plugin
+
+Dalamud injects into the game process and hands you typed FFXIVClientStructs
+objects directly — much less work than signature scanning. This skill takes the
+harder external path (`ReadProcessMemory` from a separate process) on purpose,
+for when you want:
+
+- **A standalone app with your own stack** — your own `.exe` and UI (WPF, Blazor,
+  web…), not an ImGui overlay confined to Dalamud's plugin repo, API, and update
+  cadence.
+- **No injection, no XIVLauncher/Dalamud dependency** — the tool only *reads*
+  memory; it loads no code into the game and works against a vanilla client the
+  user hasn't modded.
+- **A read-only scope** — you just observe state (inventory, gear…); you don't
+  need to call game functions or hook events.
+
+Reach for **Dalamud instead** when you need to *act* in-game (call functions, hook
+events, draw in-game overlays) or want the easiest path with typed access and
+offsets that update for you. Both read the same structs — Dalamud is easier,
+external is more self-contained. Note both are against the game's ToS (see below).
+
 ## Host
 
 The reader needs a host running full .NET. For a UI, **Blazor Hybrid (WPF +

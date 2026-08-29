@@ -19,6 +19,12 @@ The skill also records the two non-obvious failures that cost the most time:
 short signatures matching in multiple places (validate every match), and
 FFXIVClientStructs `T*` fields being pointers you must dereference.
 
+**Why external reading, not a Dalamud plugin?** Dalamud injects into the game and
+gives you typed objects with far less work — use it when you need to act in-game
+or want the easy path. This external approach is for a **standalone, read-only**
+app with your own UI and stack, that injects no code and needs no XIVLauncher/
+Dalamud. (Both are against the game's ToS — see below.)
+
 ## What's inside
 
 ```
@@ -91,6 +97,11 @@ MIT — see [LICENSE](LICENSE).
 
 Skill 裡也寫下兩個最花時間的坑：短特徵碼會在 `.text` 多處命中（每個都要驗證再挑），
 還有 FFXIVClientStructs 的 `T*` 欄位是指標、要多解一層才拿得到資料。
+
+**為什麼走外部讀取，不做 Dalamud 外掛？** Dalamud 是注入到遊戲裡、直接給你型別化的物件，
+省事很多 —— 要在遊戲內做事、或想走輕鬆路線就用它。這套外部做法是為了做一個**獨立、唯讀**、
+有自己 UI 和技術棧的程式：不注入任何程式碼，也不需要 XIVLauncher／Dalamud。
+（兩種做法都違反遊戲服務條款，見下方。）
 
 ## 內容
 
