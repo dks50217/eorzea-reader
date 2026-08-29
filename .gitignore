@@ -1,7 +1,16 @@
 # This repo is an agent skill (docs + code templates); nothing gets built here.
-# Ignore stray OS / editor cruft only.
+# OS / editor cruft
 .DS_Store
 Thumbs.db
 *.swp
 .vscode/
 .idea/
+.vs/
+
+# .NET build output — in case the .cs templates get opened/compiled in an IDE
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+project.lock.json
+artifacts/
