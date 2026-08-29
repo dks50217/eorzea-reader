@@ -2,9 +2,10 @@
 
 **English** | [中文](#中文)
 
-A [Claude](https://claude.com/claude-code) **Skill** for building tools that read
-**Final Fantasy XIV** data — live state from process memory, and static data from
-the game's files.
+A portable **skill** for AI coding agents (Claude Code, Codex, and the like) —
+for building tools that read **Final Fantasy XIV** data: live state from process
+memory, and static data from the game's files. It's just Markdown plus a couple
+of C# templates, so any agent that loads skills can use it.
 
 It packages a working, patch-resilient approach:
 
@@ -35,8 +36,7 @@ eorzea-reader/
 
 ## Install
 
-Copy this repo into your Claude Code skills directory as a folder named
-`eorzea-reader`:
+**Claude Code** — clone into a skills directory as a folder named `eorzea-reader`:
 
 ```bash
 # personal (all projects)
@@ -46,8 +46,12 @@ git clone https://github.com/<you>/eorzea-reader.git ~/.claude/skills/eorzea-rea
 git clone https://github.com/<you>/eorzea-reader.git .claude/skills/eorzea-reader
 ```
 
-Claude Code discovers it on next start. Invoke with `/eorzea-reader`, or just ask
-about reading FFXIV memory/game data and it loads automatically.
+It's discovered on next start. Invoke with `/eorzea-reader`, or just ask about
+reading FFXIV memory/game data and it loads automatically.
+
+**Other agents (Codex, etc.)** — it's plain Markdown, so point your agent at
+`SKILL.md` (and the `references/` files it links), or drop the folder wherever
+that tool looks for skills.
 
 ## Credits
 
@@ -75,8 +79,9 @@ MIT — see [LICENSE](LICENSE).
 
 [English](#eorzea-reader) | **中文**
 
-一個給 [Claude](https://claude.com/claude-code) 用的 **Skill**，教你寫工具去讀
+一個給 AI 編碼 agent（Claude Code、Codex 等）用的 **skill**，教你寫工具去讀
 **Final Fantasy XIV** 的資料：一種是遊戲執行中的即時狀態，一種是遊戲檔案裡的靜態資料。
+內容就是 Markdown 加幾個 C# 範本，任何吃 skill 的 agent 都能用。
 
 它把一套實際能用、又扛得住改版的做法收在一起：
 
@@ -104,7 +109,7 @@ eorzea-reader/
 
 ## 安裝
 
-把這個 repo 複製到 Claude Code 的 skills 目錄，資料夾名稱用 `eorzea-reader`：
+**Claude Code** —— 把這個 repo 複製到 skills 目錄，資料夾名稱用 `eorzea-reader`：
 
 ```bash
 # 個人（所有專案共用）
@@ -114,8 +119,11 @@ git clone https://github.com/<你的帳號>/eorzea-reader.git ~/.claude/skills/e
 git clone https://github.com/<你的帳號>/eorzea-reader.git .claude/skills/eorzea-reader
 ```
 
-下次啟動 Claude Code 就會載入。打 `/eorzea-reader` 叫它，或直接問關於讀 FFXIV
+下次啟動就會載入。打 `/eorzea-reader` 叫它，或直接問關於讀 FFXIV
 記憶體／遊戲資料的問題，它會自己載入。
+
+**其他 agent（Codex 等）** —— 內容都是純 Markdown，把 agent 指向 `SKILL.md`
+（以及它連到的 `references/`）即可，或把資料夾放到那個工具找 skill 的位置。
 
 ## 致謝
 
