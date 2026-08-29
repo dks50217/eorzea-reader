@@ -2,12 +2,12 @@
 
 **English** | [中文](#中文)
 
-A portable **skill** for AI coding agents (Claude Code, Codex, and the like) —
-for building tools that read **Final Fantasy XIV** data: live state from process
-memory, and static data from the game's files. It's just Markdown plus a couple
-of C# templates, so any agent that loads skills can use it.
+> Read live **Final Fantasy XIV** state from process memory, and static data
+> from the game's files — patch-resilient, no hand reverse-engineering.
 
-It packages a working, patch-resilient approach:
+A portable **skill** for AI coding agents (Claude Code, Codex, and the like).
+It's just Markdown plus a couple of C# templates, so any agent that loads skills
+can use it. It bundles one approach that works and survives patches:
 
 - **Live state** (inventory, gear, party, character…) via external
   `ReadProcessMemory`, located with **FFXIVClientStructs** signatures and struct
@@ -85,11 +85,11 @@ MIT — see [LICENSE](LICENSE).
 
 [English](#eorzea-reader) | **中文**
 
-一個給 AI 編碼 agent（Claude Code、Codex 等）用的 **skill**，教你寫工具去讀
-**Final Fantasy XIV** 的資料：一種是遊戲執行中的即時狀態，一種是遊戲檔案裡的靜態資料。
-內容就是 Markdown 加幾個 C# 範本，任何吃 skill 的 agent 都能用。
+> 在遊戲外部讀 **Final Fantasy XIV** 的即時狀態（記憶體）和靜態資料（遊戲檔案）——
+> 扛得住改版，不用自己逆向。
 
-它把一套實際能用、又扛得住改版的做法收在一起：
+一個給 AI 編碼 agent（Claude Code、Codex 等）用的 **skill**。內容就是 Markdown
+加幾個 C# 範本，任何吃 skill 的 agent 都能用。它把一套實際能用、又扛得住改版的做法收在一起：
 
 - **即時狀態**（背包、裝備、隊伍、角色⋯⋯）：在遊戲外部用 `ReadProcessMemory` 讀它的記憶體，
   位址靠 **FFXIVClientStructs** 的特徵碼和 struct offset 定位，不用自己逆向。

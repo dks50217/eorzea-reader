@@ -48,10 +48,12 @@ external is more self-contained. Note both are against the game's ToS (see below
 
 ## Host
 
-The reader needs a host running full .NET. For a UI, **Blazor Hybrid (WPF +
-BlazorWebView)** works well — Razor components run on full .NET and call
-`ReadProcessMemory` directly (see `references/blazor-hybrid-ui.md`). A plain
-console app is fine for a headless reader or smoke test.
+The reader needs any host running full .NET. A **plain console app is enough** to
+read and print state, and is the fastest way to prove the reader works — start
+there. A UI is a separate, optional layer on top; use whatever stack you like.
+One that happens to work well is Blazor Hybrid (WPF + BlazorWebView), since Razor
+components run on full .NET and can call `ReadProcessMemory` directly — the
+optional `references/blazor-hybrid-ui.md` walks through it if you want a UI.
 
 ## The workflow
 
@@ -76,7 +78,9 @@ console app is fine for a headless reader or smoke test.
 4. **Add names/icons with Lumina** — `references/game-files-lumina.md`. Item name
    is one line: `sItem.GetRow(id).Name`. Icons decode to a `data:image/bmp` URI.
 
-5. **Wire a UI** if wanted — `references/blazor-hybrid-ui.md`.
+5. **(Optional) Wire a UI.** The reader doesn't care what renders it — any
+   full-.NET UI works. `references/blazor-hybrid-ui.md` is one worked example
+   (Blazor Hybrid), not a requirement.
 
 ## Two gotchas that will bite you (they bit us)
 
@@ -110,6 +114,6 @@ anything that modifies game memory unless the user has a clear legitimate reason
   `[FieldOffset]` into reader code; a worked InventoryManager example.
 - `references/game-files-lumina.md` — Lumina setup, item names, icon→BMP URIs,
   dye colors, language selection.
-- `references/blazor-hybrid-ui.md` — WPF + BlazorWebView project layout, DI
-  registration, per-second refresh component.
+- `references/blazor-hybrid-ui.md` — *(optional — one UI choice)* WPF +
+  BlazorWebView project layout, DI registration, per-second refresh component.
 - `assets/WinApi.cs`, `assets/MemScanner.cs` — copy-in templates.
